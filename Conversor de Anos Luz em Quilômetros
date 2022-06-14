@@ -1,0 +1,85 @@
+namespace ConversorAnosLuz_Km
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        // dados anos luz
+        double velocidade = 300000, tempo, distancia;
+
+        private void btnCalcular_Click(object sender, EventArgs e)
+        {
+            lblValorKm.BackColor = Color.WhiteSmoke;
+
+            double.TryParse(txtValorAnosLuz.Text, out tempo);
+
+            double AnosLuzEmSegundos = tempo * 365 * 24 * 3600;
+
+            distancia = velocidade * AnosLuzEmSegundos;
+
+            txtValorKm.Text = distancia.ToString("#,#");
+            lblValorKmCientifico.Text = "Valor ciêntifico = " + distancia.ToString("0.###E+0");
+
+            if (txtValorKm.Text == "")
+            {
+
+                MessageBox.Show("Não foi possivel calcular, por favor insira(somente) números...", lblValorKmCientifico.Text = "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                lblValorKmCientifico.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblValorKmCientifico.ForeColor = Color.Black;
+            }
+
+        }
+
+        private void txtValorKm_TextChanged(object sender, EventArgs e)
+        {
+            lblValorKm.Text = txtValorKm.Text + " km.";
+
+            if (txtValorKm.Text != "")
+            {
+                lblValorKm.ForeColor = Color.Green;
+                lblTemaKm.ForeColor = Color.Green;
+            }
+            else
+            {
+                lblTemaKm.ForeColor = Color.White;
+                lblValorKm.ForeColor = Color.White;
+            }
+        }
+
+        private void btnLimpar_Click(object sender, EventArgs e)
+        {
+            txtValorAnosLuz.Clear();
+            txtValorKm.Clear();
+            lblValorKmCientifico.ResetText();
+            lblValorKm.ResetText();
+            lblValorAnosluz.ResetText();
+           
+        }
+
+        private void txtValorAnosLuz_TextChanged(object sender, EventArgs e)
+        {
+            lblValorAnosluz.Text = txtValorAnosLuz.Text + " Anos Luz.";
+            lblValorAnosluz.BackColor = Color.Blue;
+
+            if (txtValorAnosLuz.Text != "")
+            {
+                lblValorAnosluz.ForeColor = Color.LightBlue;
+                lblTemaAnosLuz.ForeColor = Color.LightBlue;
+            }
+            else
+            {
+                lblValorAnosluz.ForeColor = Color.White;
+                lblTemaAnosLuz.ForeColor = Color.White;
+            }
+        }
+
+           
+    }
+}
