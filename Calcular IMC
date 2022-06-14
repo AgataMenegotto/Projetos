@@ -1,0 +1,162 @@
+namespace CalculoIMC
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        double peso, altura, resultado;
+
+        private void txtPeso_TextChanged(object sender, EventArgs e)
+        {
+            if (txtPeso.Text.Contains("."))
+            {
+                MessageBox.Show("Para processamento correto do calculo, será substituído o ponto(.) por virgula(,)", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string susbtituir = txtPeso.Text.Replace('.', ',');
+                txtPeso.Text = susbtituir;
+                return;
+            }
+
+            if (txtPeso.Text != "")
+            {
+                lblInfoPeso.ForeColor = Color.Blue;
+            }
+            else
+            {
+                lblInfoPeso.ForeColor = Color.Black;
+
+            }
+        }
+
+        private void txtAltura_TextChanged(object sender, EventArgs e)
+        {
+            if (txtAltura.Text.Contains("."))
+            {
+                MessageBox.Show("Para processamento correto do calculo, será substituído o ponto(.) por virgula(,)", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string susbtituir = txtAltura.Text.Replace('.', ',');
+                txtAltura.Text = susbtituir;
+                return;
+            }
+
+            if (txtAltura.Text != "")
+            {
+                lblInfoAltura.ForeColor = Color.Blue;
+            }
+            else
+            {
+                lblInfoAltura.ForeColor = Color.Black;
+            }
+        }
+
+        public void checagemNumeros()
+        {
+            if (txtAltura.Text == "" && txtPeso.Text == "")
+            {
+                MessageBox.Show("Não é possível calcular sem números!", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtPeso.Clear();
+                txtAltura.Clear();
+                txtResultado.Clear();
+            }
+            else if (txtResultado.Text == "NaN" || txtResultado.Text == "0")
+            {
+                MessageBox.Show("Por favor, insira apenas números nos campos!", "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPeso.Clear();
+                txtAltura.Clear();
+                txtResultado.Clear();
+
+                return;
+            }
+        }
+
+        #region Anotações
+        //Formula IMC=peso/altura²
+        #endregion
+
+        private void btnCalcular_Click(object sender, EventArgs e)
+        {
+            double.TryParse(txtPeso.Text, out peso);
+            double.TryParse(txtAltura.Text, out altura);
+            double.TryParse(txtResultado.Text, out resultado);
+
+            resultado = peso / Math.Pow(altura, 2);
+            txtResultado.Text = resultado.ToString();
+           
+            checagemNumeros();
+
+            // Status do IMC 
+
+            #region Status do IMC 
+            string mGrave = " Magreza Grave !!!";
+            string mModerada = " Magreza moderada !";
+            string mLeve = " Magreza leve.";
+            string sobrepeso = " com Sobrepeso";
+            string oGrauI = " Obesidade Grau I !";
+            string oGrauII = " Obesidade Grau II !!";
+            string oGrauIII = " Obesidade Grau III !!!";
+            #endregion
+
+
+            void  mensagemPeso(string imc, string pesoStatus)
+            {
+                lblResultado.Text = "Seu IMC é = " + imc + ", você está com" + pesoStatus;
+            }
+
+            if (txtResultado.Text == "")
+            {
+                lblResultado.ForeColor = Color.Red;
+                lblResultado.Text = "Tente novamente...";
+                return;
+            }
+           
+            else
+            {
+                lblResultado.ForeColor = Color.Green;
+
+                if (resultado < 16)
+                {
+                    mensagemPeso(resultado.ToString(), mGrave);
+                } 
+
+                else if (resultado >= 16 && resultado < 17)
+                {
+                    mensagemPeso(resultado.ToString(), mModerada);
+                }
+
+                else if (resultado >=17 && resultado < 18.5)
+                {
+                    mensagemPeso(resultado.ToString(), mLeve);
+                }
+
+                else if (resultado >= 18.5 && resultado < 25)
+                {
+                    lblResultado.Text = "Seu IMC é = " + resultado.ToString() + ", Parabéns! Você está com peso saudável!";
+                }
+
+                else if (resultado >= 25 && resultado < 30)
+                {
+                    mensagemPeso(resultado.ToString(), sobrepeso);
+                }
+
+                else if (resultado >= 30 && resultado < 35)
+                {
+                    mensagemPeso(resultado.ToString(), oGrauI);
+                }
+
+                else if (resultado >= 35 && resultado < 40)
+                {
+                    mensagemPeso(resultado.ToString(), oGrauII);
+                }
+
+                else if (resultado >= 40)
+                {
+                    mensagemPeso(resultado.ToString(), oGrauIII);
+                }
+           
+            }
+            
+
+        }
+    }
+}
