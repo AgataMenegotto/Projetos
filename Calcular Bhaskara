@@ -1,0 +1,185 @@
+namespace CalcularBaskara
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        // Coletando informações
+        double a, b, c, delta, xMaisResultado, xMenosResultado;
+       
+        private void btnCalcular_Click(object sender, EventArgs e)
+        {
+            double.TryParse(txtA.Text, out a);
+            double.TryParse(txtB.Text, out b);
+            double.TryParse(txtC.Text, out c);
+
+            // Calculo para descobrir delta
+            double elevarB = Math.Pow(b, 2);
+            double MultipAC = 4 * (a * c);
+            delta = elevarB - (MultipAC);
+
+            double raizDelta = Math.Sqrt(delta);
+
+            if (raizDelta % 2 != 0)
+            {
+                // Se o número não tiver raiz quadrada inteira
+                MessageBox.Show("Certifique-se de que os números estão corretos, " +
+                                   "pois os valores passados não resultam em raiz " +
+                                   "quadrada inteira.",
+                                   "Atenção!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                txtA.Clear();
+                txtB.Clear();
+                txtC.Clear();
+                txtResultado.Clear();
+                txtResultado2.Clear();
+
+                return;
+
+            }
+           
+
+            xMaisResultado = (-b + raizDelta) / (2 * a);
+            xMenosResultado = (-b - raizDelta) / (2 * a);
+            
+            // Mostrar Resultado
+            txtResultado.Text = xMaisResultado.ToString();
+            txtResultado2.Text = xMenosResultado.ToString();
+
+            if (txtResultado.Text  == "NaN" || txtResultado2.Text == "NaN" || a.ToString() == "0" || b.ToString() == "0" || c.ToString() == "0")
+            {
+                MessageBox.Show("Certifique-se de não colocar letra ou qualquer " +
+                                "outro caracter que não seja número e não deixe um campo vázio.", "Atenção!", 
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtA.Clear();
+                txtB.Clear();
+                txtC.Clear();
+                txtResultado.Clear();
+                txtResultado2.Clear();
+
+                return;
+
+            }
+        }
+
+        private void txtA_TextChanged(object sender, EventArgs e)
+        {
+           lblA.Text = "a = " + txtA.Text;
+        }
+
+        private void txtB_TextChanged(object sender, EventArgs e)
+        {
+            lblB.Text = "b = " + txtB.Text;
+        }
+
+        private void txtC_TextChanged(object sender, EventArgs e)
+        {
+            lblC.Text = "c = " + txtC.Text;
+        }
+
+        private void btnLimpar_Click(object sender, EventArgs e)
+        {
+            txtA.Clear();
+            txtB.Clear();
+            txtC.Clear();
+            txtResultado.Clear();
+            txtResultado2.Clear();
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            link.Links.Add(0, link.Text.Length, "https://mundoeducacao.uol.com.br/matematica/formula-bhaskara.htm");
+        }
+
+        private void txtResultado_TextChanged(object sender, EventArgs e)
+        {
+            lblX1.Text = "X' ou X1 = " + txtResultado.Text;
+        }
+
+        private void txtResultado2_TextChanged(object sender, EventArgs e)
+        {
+            lblX2.Text = "X'' ou X2 = " + txtResultado2.Text;
+        }
+
+        private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(e.Link.LinkData.ToString());
+        
+            link.LinkVisited = true;
+        }
+
+        private void verFormula_Click(object sender, EventArgs e)
+        {
+            Formula form = new Formula();
+
+            form.Dados = "∆ = " + b + "² " + "- " + "(4 × " + a + " × " + c + ")";
+            form.ValorDelta = "∆ = " + delta.ToString();
+            form.ValorBaskara1 = "X' = -" + b + "+ √" + delta.ToString();
+            form.ValorBaskara2 = "X'' = -" + b + " - √" + delta.ToString();
+            form.VezesDois1 = "2×" + a;
+            form.VezesDois2 = "2×" + a;
+            form.Resultado1 = "= " + xMaisResultado;
+            form.Resultado2 = "= " + xMenosResultado;
+
+            form.ShowDialog();
+        }
+
+    }
+}
+
+namespace CalcularBaskara
+{
+    public partial class Formula : Form
+    {
+        // Para intermediar a comunicação entre as duas forms
+        public string Dados { get; set; }
+        public string ValorDelta { get; set; }
+        public string ValorBaskara1 { get; set; }
+        public string ValorBaskara2 { get; set; }
+        public string VezesDois1 { get; set; }
+        public string VezesDois2 { get; set; }
+        public string Resultado1 { get; set; }
+        public string Resultado2 { get; set; }
+
+
+        public Formula()
+        {
+            InitializeComponent();
+        }
+
+        private void Formula_Load(object sender, EventArgs e)
+        {
+            lblDelta.Text = Dados;
+            lblValorDelta.Text = ValorDelta;
+            
+            lblValorBaskara1.Text = ValorBaskara1;
+            lblValorBaskara2.Text = ValorBaskara2;
+
+            lblVezesDois1.Text = VezesDois1;
+            lblVezesDois2.Text = VezesDois2;
+
+            lblResultado1.Text = Resultado1;
+            lblResultado2.Text = Resultado2;
+        }
+
+        
+        private void btnLimpar_Click(object sender, EventArgs e)
+        {
+            lblDelta.Text = null;
+            lblValorDelta.Text = null;
+
+            lblValorBaskara1.Text = null;
+            lblValorBaskara2.Text = null;
+
+            lblVezesDois1.Text = null;
+            lblVezesDois2.Text = null;
+                                 
+            lblResultado1.Text = null;
+            lblResultado2.Text = null;
+        }
+    }
+}
